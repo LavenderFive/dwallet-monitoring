@@ -62,6 +62,9 @@ Containers:
 1. docker compose up -d
 ```
 
+![dWallet Dashboard](https://raw.githubusercontent.com/LavenderFive/dwallet-monitoring/master/screens/dwallet_monitoring.png)
+
+
 ## Setup Grafana
 
 ### Grafana  Dashboard
