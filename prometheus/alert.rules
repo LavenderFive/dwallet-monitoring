@@ -136,3 +136,11 @@ groups:
       job: dwallet
     annotations:
       description: 'Consensus handler scores for authority "{{ $labels.authority }}" is 0.'
+  - alert: NodeNotSyncing
+    expr: increase(highest_synced_checkpoint[5m]) < 1
+    for: 5m
+    labels:
+      severity: critical
+      job: dwallet
+    annotations:
+      description: 'Latest Checkpoint not increasing "{{ $labels.authority }}" is 0.'
