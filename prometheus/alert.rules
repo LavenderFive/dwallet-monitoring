@@ -1,0 +1,138 @@
+groups:
+- name: Node/server alerts
+  rules:
+  - alert: InstanceDown
+    expr: up == 0
+    for: 3m
+    annotations:
+      title: 'Instance {{ $labels.instance }} down'
+      description: '{{ $labels.job }} on {{ $labels.instance }} has been down for more than 3 minutes'
+    labels:
+      severity: 'critical'
+
+  - alert: NodeFilesystemReadonly
+    expr: node_filesystem_readonly{fstype!~"rootfs|nfs4"} > 0
+    for: 5m
+    labels:
+      severity: critical
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" is read-only.'
+
+  - alert: NodeDiskFull48H
+    expr: predict_linear(node_filesystem_free_bytes{fstype!~"rootfs|nfs4|tmpfs"}[4h], 48 * 3600) < 0
+    for: 5m
+    labels:
+      severity: major
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" will be out of diskspace within 48 hours.'
+
+  - alert: NodeDiskFull1H
+    expr: predict_linear(node_filesystem_free_bytes{fstype!~"rootfs|nfs4|tmpfs"}[4h], 3600) < 0
+    for: 5m
+    labels:
+      severity: critical
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" will be out of diskspace within 1 hour.'
+
+  - alert: NodeDiskFull
+    expr: node_filesystem_avail_bytes/node_filesystem_size_bytes < 0.01
+    for: 5m
+    labels:
+      severity: critical
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" is out of diskspace (< 1% free).'
+
+  - alert: NodeInodeFull48H
+    expr: predict_linear(node_filesystem_files_free{fstype!~"rootfs|nfs4|tmpfs"}[4h], 48 * 3600) < 0
+    for: 5m
+    labels:
+      severity: major
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" will be out of inode numbers within 48 hours.'
+
+  - alert: NodeInodeFull1H
+    expr: predict_linear(node_filesystem_files_free{fstype!~"rootfs|nfs4|tmpfs"}[4h], 3600) < 0
+    for: 5m
+    labels:
+      severity: critical
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" will be out of inode numbers within 1 hour.'
+
+  - alert: NodeInodeFull
+    expr: node_filesystem_files_free/node_filesystem_files < 0.01
+    for: 5m
+    labels:
+      severity: critical
+      service: node_exporter
+    annotations:
+      description: 'Filesystem "{{ $labels.mountpoint }}" on "{{ $labels.instance }}" out of inodes (< 1% free).'
+
+  - alert: NodeOutOfMemory
+    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+    for: 2m
+    labels:
+      severity: warning
+      service: node_exporter
+    annotations:
+      description: 'Node memory is filling up < 10% left\n  VALUE = {{ $value }}\n LABELS: {{ $labels.instance }}'
+
+  - alert: NodeHighCPULoad
+    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
+    for: 0m
+    labels:
+      severity: warning
+      service: node_exporter
+    annotations:
+      description: 'CPU load is > 80%\n  VALUE = {{ $value }}\n LABELS: {{ $labels.instance }}'
+
+  - alert: NodeTimeOutOfSync
+    expr: node_timex_sync_status{} != 1
+    for: 5m
+    labels:
+      severity: warning
+      service: node_exporter
+    annotations:
+      description: 'Time on instance "{{ $labels.instance }}" not in sync with NTP.'
+
+  - alert: NodeTextfileCollectorDown
+    expr: time() - node_textfile_mtime_seconds{} > 3000
+    for: 5m
+    labels:
+      severity: warning
+      service: node_exporter
+    annotations:
+      description: 'Node-exporter textfile collector for file "{{ $labels.file }}" on "{{ $labels.instance }}" has been down for 5 minutes.'
+
+  - alert: NodeTextfileScrapingError
+    expr: node_textfile_scrape_error != 0
+    for: 5m
+    labels:
+      severity: warning
+      service: node_exporter
+    annotations:
+      description: 'Node-exporter textfile collector scraping error on "{{ $labels.instance }}".'
+
+- name: dWallet Alerts
+  rules:
+  - alert: LowConsensusHandlerScores
+    expr: consensus_handler_scores{authority="$validator"} < 100
+    for: 5m
+    labels:
+      severity: warning
+      job: dwallet
+    annotations:
+      description: 'Consensus handler scores for authority "{{ $labels.authority }}" is below 100.'
+  - alert: LowConsensusHandlerScores
+    expr: consensus_handler_scores{authority="$validator"} == 0
+    for: 5m
+    labels:
+      severity: critical
+      job: dwallet
+    annotations:
+      description: 'Consensus handler scores for authority "{{ $labels.authority }}" is 0.'
