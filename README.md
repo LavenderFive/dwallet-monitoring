@@ -20,7 +20,7 @@ cp .env.sample .env
 You'll need your node ip or dns (`dwallet-tesnet-1.lavenderfive.com`) in addition to your validator name.
 
 ```sh
-nano prometheus/prometheus.yaml
+nano prometheus/prometheus.yml
 ```
 
 3. Start monitoring containers
