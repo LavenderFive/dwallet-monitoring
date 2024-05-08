@@ -10,13 +10,27 @@ This is intended to be a single-stop solution for monitoring your dWallet valida
 
 Clone this repository on your Docker host, cd into dwallet-monitoring directory and run compose up:
 
+1. Basic Setup
 ```bash
 git clone https://github.com/LavenderFive/dwallet-monitoring
 cd dwallet-monitoring
-docker-compose up -d
+cp .env.sample .env
 ```
 
-**Caddy v2 does not accept plaintext passwords. It MUST be provided as a hash value. The above password hash corresponds to ADMIN_PASSWORD 'admin'. To know how to generate hash password, refer [Updating Caddy to v2](#Updating-Caddy-to-v2)**
+2. Setup Prometheus
+You'll need your node ip or dns (`dwallet-tesnet-1.lavenderfive.com`) in addition to your validator name.
+
+```sh
+nano prometheus/prometheus.yaml
+```
+
+3. Start monitoring containers
+```sh
+docker compose up
+```
+
+4. Confirm monitoring is working 
+Open `localhost:3000` in your browser (or whatever IP you're running these containers from). Login with `admin/admin`.
 
 Prerequisites:
 
@@ -26,33 +40,25 @@ Prerequisites:
 Containers:
 
 * Prometheus (metrics database) `http://<host-ip>:9090`
-* Prometheus-Pushgateway (push acceptor for ephemeral and batch jobs) `http://<host-ip>:9091`
 * AlertManager (alerts management) `http://<host-ip>:9093`
-* Alertmanager-discord (disabled by default) `http://<host-ip>:9094`
 * Grafana (visualize metrics) `http://<host-ip>:3000`
   * Infinity Plugin
 * NodeExporter (host metrics collector)
 * cAdvisor (containers metrics collector)
 * Caddy (reverse proxy and basic auth provider for prometheus and alertmanager)
-* Tenderduty (Cosmos node monitoring solution)
-* Peggo Prometheus Exporter (Peggo monitoring solution)
 
 ## TL;DR: Steps
 ```
+1. cd ~/dwallet-monitoring
 1. cp .env.sample .env
------ Peggo -----
-1. rename .env/ORCHESTRATOR_ADDRESS to your orchestrator
-1. under alertmanager/config.yml add your Pagerduty integration/service key
--- IF YOU'RE JUST USING THIS FOR PEGGO, SKIP TO STEP 6! --
------ Tenderduty -----
-1. under tenderduty/config.yml add your validator/endpoint information
 ----- Caddy ------
 1. under caddy/Caddyfile:
 1. replace YOUR_WEBSITE.COM with your website
 1. replace YOUR_EMAIL@EMAIL.COM with your email
 1. point your dns to your monitoring server
+---- dwallet ----
+1. add your node ip and validator under prometheus/prometheus.yaml
 -----------------
-1. cd ~/dwallet-monitoring
 1. docker compose up -d
 ```
 
