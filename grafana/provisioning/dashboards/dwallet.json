@@ -64,7 +64,7 @@
         }
       ]
     },
-    "description": "Sui Validator Node dashboard. Uses Grafana agent with node exporter plugin/integration enabled. ",
+    "description": "dwallet Validator Node dashboard. Uses Grafana agent with node exporter plugin/integration enabled. ",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "gnetId": 18297,
@@ -83,7 +83,7 @@
         },
         "id": 322,
         "panels": [],
-        "title": "Sui Metrics Dashboard",
+        "title": "dwallet Metrics Dashboard",
         "type": "row"
       },
       {
@@ -361,7 +361,7 @@
             "refId": "A"
           }
         ],
-        "title": "Sui Client Version",
+        "title": "dwallet Client Version",
         "transformations": [
           {
             "id": "organize",
@@ -441,7 +441,7 @@
             "refId": "A"
           }
         ],
-        "title": "Sui Node Uptime",
+        "title": "dwallet Node Uptime",
         "type": "stat"
       },
       {
@@ -1512,7 +1512,7 @@
             "editorMode": "code",
             "expr": "sui_network_peers",
             "hide": false,
-            "legendFormat": "Sui Network Peers",
+            "legendFormat": "dwallet Network Peers",
             "range": true,
             "refId": "C"
           },
@@ -2761,7 +2761,7 @@
                 "refId": "A"
               }
             ],
-            "title": "Sui Network Peers",
+            "title": "dwallet Network Peers",
             "type": "timeseries"
           },
           {
@@ -5039,7 +5039,7 @@
     "refresh": "30s",
     "schemaVersion": 39,
     "tags": [
-      "sui",
+      "dwallet",
       "fullnode"
     ],
     "templating": {
@@ -5047,8 +5047,8 @@
         {
           "current": {
             "selected": false,
-            "text": "sui",
-            "value": "sui"
+            "text": "dwallet",
+            "value": "dwallet"
           },
           "hide": 0,
           "includeAll": false,
@@ -5058,11 +5058,11 @@
           "options": [
             {
               "selected": true,
-              "text": "sui",
-              "value": "sui"
+              "text": "dwallet",
+              "value": "dwallet"
             }
           ],
-          "query": "sui",
+          "query": "dwallet",
           "skipUrlSync": false,
           "type": "custom"
         },
@@ -5196,7 +5196,7 @@
       ]
     },
     "timezone": "",
-    "title": "Sui Validator Dashboard",
+    "title": "dwallet Validator Dashboard",
     "uid": "BVZRT6pMQk11",
     "version": 9,
     "weekStart": ""

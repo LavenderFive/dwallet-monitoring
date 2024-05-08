@@ -34,7 +34,7 @@ scrape_configs:
     static_configs:
       - targets: ['pushgateway:9091']
 
-  - job_name: 'sui'
+  - job_name: 'dwallet'
     static_configs:
       - targets: ["NODE_IP:9184","NODE_IP:9100"]
         labels:

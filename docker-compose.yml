@@ -5,12 +5,10 @@ networks:
     driver: bridge
 
 volumes:
-  tenderduty:
   prometheus_data: {}
   grafana_data: {}
   caddy_data: {}
   grafana-storage: {}
-  loki_data: {}
 
 services:
   prometheus:
