@@ -37,9 +37,8 @@ scrape_configs:
 
   - job_name: 'dwallet'
     static_configs:
-      - targets: ["NODE_IP:9184","NODE_IP:9100"]
+      - targets: ["NODE_IP:9184"]
         labels:
-          chain: 'dwallet'
           validator: 'VALIDATOR_NAME'
 
 alerting:
