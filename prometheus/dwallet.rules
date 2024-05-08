@@ -1,0 +1,35 @@
+groups:
+- name: dWallet
+  rules:
+  - alert: dWalletDown
+    expr: up{job="dwallet"} == 0
+    for: 3m
+    annotations:
+      title: 'Instance {{ $labels.instance }} down'
+      description: '{{ $labels.job }} on {{ $labels.instance }} has been down for more than 3 minutes'
+    labels:
+      severity: 'critical'
+  - alert: LowConsensusHandlerScores
+    expr: consensus_handler_scores{authority="$validator"} < 100
+    for: 5m
+    labels:
+      severity: warning
+      job: dwallet
+    annotations:
+      description: 'Consensus handler scores for authority "{{ $labels.authority }}" is below 100.'
+  - alert: LowConsensusHandlerScores
+    expr: consensus_handler_scores{authority="$validator"} == 0
+    for: 5m
+    labels:
+      severity: critical
+      job: dwallet
+    annotations:
+      description: 'Consensus handler scores for authority "{{ $labels.authority }}" is 0.'
+  - alert: NodeNotSyncing
+    expr: increase(highest_synced_checkpoint[5m]) < 1
+    for: 5m
+    labels:
+      severity: critical
+      job: dwallet
+    annotations:
+      description: 'Latest Checkpoint not increasing "{{ $labels.authority }}" is 0.'

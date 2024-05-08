@@ -10,6 +10,7 @@ global:
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
   - "alert.rules"
+  - "alerts/dwallet.rules"
 
 scrape_config_files:
   - /etc/prometheus/servers/*.yml
