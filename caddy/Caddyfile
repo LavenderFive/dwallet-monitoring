@@ -24,36 +24,12 @@
     reverse_proxy alertmanager:9093
 }
 
-:9091 {
-    import basic-auth    
-    reverse_proxy pushgateway:9091
-}
-
 :80 {
     reverse_proxy grafana:3000
 }
 
 :3000 {
     reverse_proxy grafana:3000
-}
-
-:3100 {
-    @vpn {
-        remote_ip 5.0.0.0/20
-    }
-    reverse_proxy @vpn loki:3100
-}
-
-:8888 {
-    reverse_proxy tenderduty:8888
-}
-
-:28686 {
-    reverse_proxy tenderduty:28686
-}
-
-tenderduty.YOUR_WEBSITE.COM {
-    reverse_proxy tenderduty:8888
 }
 
 grafana.YOUR_WEBSITE.COM {
